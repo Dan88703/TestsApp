@@ -17,14 +17,27 @@ public class UserDao {
     private final File file;
 
     @SneakyThrows
-    public void save(User user) {
-        List<User> list = find();
-        list.add(user);
-        mapper.writeValue(file, list);
+    public boolean save(User user) {
+        try {
+            List<User> list = find();
+
+            boolean exists = list.stream()
+                    .anyMatch(u -> u.getName() != null && u.getName().equalsIgnoreCase(user.getName()));
+
+            if (exists) {
+                return false;
+            }
+
+            list.add(user);
+            mapper.writeValue(file, list);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public List<User> find() throws IOException {
-        return mapper.readValue(file, new TypeReference<List<User>>() {
-        });
+        return mapper.readValue(file, new TypeReference<List<User>>() {});
     }
 }
