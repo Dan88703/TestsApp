@@ -160,6 +160,9 @@
     <h1>Регистрация</h1>
     <p class="card__sub">Уже есть аккаунт? <a href="/login">Войти</a></p>
 
+    <% if (request.getAttribute("error") != null) { %>
+    <p class="field__error">${error}</p>
+    <% } %>
     <form class="form" method="post" action="/reg" novalidate>
         <div class="field">
             <label class="field__label" for="name">Имя</label>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Вход</title>
+    <title>Log in</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Два круга на фоне — единственное украшение */
+        /* Two circles in the background: the only decoration */
         body::before,
         body::after {
             content: "";
@@ -112,7 +112,7 @@
             box-shadow: 0 0 0 4px rgba(52, 70, 240, .16);
         }
 
-        /* Состояния для твоей логики: класс на .field */
+        /* States for your logic: add a class to .field */
         .field__error {
             display: none;
             margin: 0;
@@ -124,7 +124,7 @@
         .field.is-error .field__error { display: block; }
         .field.is-valid .field__input { border-color: var(--ok); }
 
-        /* Общая ошибка формы (например, «Неверное имя или пароль») — показывается классом .is-error на .form */
+        /* General form error (e.g. "Invalid name or password"): shown with the .is-error class on .form */
         .form__error {
             display: none;
             margin: 0;
@@ -169,25 +169,25 @@
 </head>
 <body>
 <main class="card">
-    <h1>Вход</h1>
-    <p class="card__sub">Нет аккаунта? <a href="/reg">Зарегистрироваться</a></p>
+    <h1>Log in</h1>
+    <p class="card__sub">Don't have an account? <a href="/reg">Sign up</a></p>
 
     <form class="form" method="post" action="/login" novalidate>
-        <p class="form__error" role="alert">Неверное имя или пароль</p>
+        <p class="form__error" role="alert">Invalid name or password</p>
 
         <div class="field">
-            <label class="field__label" for="name">Имя</label>
-            <input class="field__input" id="name" name="name" type="text" placeholder="Твоё имя" autocomplete="username">
-            <p class="field__error">Введи имя</p>
+            <label class="field__label" for="name">Name</label>
+            <input class="field__input" id="name" name="name" type="text" placeholder="Your name" autocomplete="username">
+            <p class="field__error">Enter your name</p>
         </div>
 
         <div class="field">
-            <label class="field__label" for="password">Пароль</label>
-            <input class="field__input" id="password" name="password" type="password" placeholder="Твой пароль" autocomplete="current-password">
-            <p class="field__error">Введи пароль</p>
+            <label class="field__label" for="password">Password</label>
+            <input class="field__input" id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password">
+            <p class="field__error">Enter your password</p>
         </div>
 
-        <button class="btn-primary" type="submit">Войти</button>
+        <button class="btn-primary" type="submit">Log in</button>
     </form>
 </main>
 </body>

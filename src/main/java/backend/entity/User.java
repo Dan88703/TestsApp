@@ -1,5 +1,6 @@
 package backend.entity;
 
+import backend.dao.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class User {
 private UUID id;
+private Role role;
 private String name;
 private String password;
 }

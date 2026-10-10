@@ -17,7 +17,7 @@ public class UserDao {
     private final File file;
 
     @SneakyThrows
-    public boolean save(User user) {
+    public synchronized boolean save(User user) {
         try {
             List<User> list = find();
 
@@ -37,7 +37,8 @@ public class UserDao {
         }
     }
 
-    public List<User> find() throws IOException {
-        return mapper.readValue(file, new TypeReference<List<User>>() {});
+    public synchronized List<User> find() throws IOException {
+        return mapper.readValue(file, new TypeReference<List<User>>() {
+        });
     }
 }
