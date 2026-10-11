@@ -376,6 +376,7 @@
         <span>Tests found: ${tests.size()}</span>
         <h1>Tests</h1>
         <a href="${pageContext.request.contextPath}/results">My results</a>
+        <a class="admin-only" href="${pageContext.request.contextPath}/admin/stats">Statistics</a>
         <div class="top__user">
             <span>Hi, <c:out value="${sessionScope.user.name}"/></span>
             <form action="${pageContext.request.contextPath}/logout" method="post">
