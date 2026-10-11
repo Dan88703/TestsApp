@@ -36,10 +36,18 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        if (path.startsWith("/admin") && user.getRole() != Role.ADMIN) {
+        String pathInfo = req.getPathInfo();
+        String fullPath = path + (pathInfo == null ? "" : pathInfo);
+
+        boolean adminOnly = fullPath.startsWith("/admin")
+                || (req.getMethod().equals("POST")
+                && fullPath.startsWith("/tests")
+                && !fullPath.endsWith("/submit"));
+        if (adminOnly && user.getRole() != Role.ADMIN) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
+
 
         chain.doFilter(request, response);
     }

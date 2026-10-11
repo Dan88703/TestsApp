@@ -1,1 +1,14 @@
-[{"id":"da36f1d8-8649-47fd-8567-cac4af271ac5","role":"USER","name":"lol","password":"$2a$10$vm2HzGojfQE9JnM5Sw62ueqfHxNHpCAPgqOYItdddlOvQ4T2IgXoy"}]
+[
+  {
+    "id": "da36f1d8-8649-47fd-8567-cac4af271ac5",
+    "role": "USER",
+    "name": "lol",
+    "password": "$2a$10$vm2HzGojfQE9JnM5Sw62ueqfHxNHpCAPgqOYItdddlOvQ4T2IgXoy"
+  },
+  {
+    "id": "1c828046-33e1-4bee-b0e2-52854505cfa7",
+    "role": "ADMIN",
+    "name": "admin",
+    "password": "$2a$10$71mYt2lwK1r964QI2bHpIeD03yk47MCnpe7eGGzSTVMn6Gnu5kCda"
+  }
+]

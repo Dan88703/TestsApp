@@ -130,15 +130,7 @@
             margin: 0 0 18px;
         }
 
-        /* Админская часть: скрыта, пока на body нет класса is-admin
-           (ставится с сервера; на бэкенде всё равно проверяй роль!) */
-        .admin-only {
-            display: none;
-        }
-
-        body.is-admin .admin-only {
-            display: block;
-        }
+        body:not(.is-admin) .admin-only { display: none; }
 
         /* Форма */
         .form {
@@ -381,6 +373,7 @@
     <header class="top">
         <span>Tests found: ${tests.size()}</span>
         <h1>Tests</h1>
+        <a href="${pageContext.request.contextPath}/results">My results</a>
         <div class="top__user">
             <span>Hi, <c:out value="${sessionScope.user.name}"/></span>
             <form action="${pageContext.request.contextPath}/logout" method="post">
@@ -390,17 +383,15 @@
     </header>
     <section class="card admin-only">
         <h2>New test</h2>
-        <form class="form" method="post" action="/tests" novalidate>
+        <form class="form" method="post" action="${pageContext.request.contextPath}/tests">
             <div class="field">
                 <label class="field__label" for="title">Title</label>
-                <input class="field__input" id="title" name="title" type="text" placeholder="For example, Java Basics">
-                <p class="field__error">Enter a test title</p>
+                <input class="field__input" id="title" name="title" type="text" maxlength="100" required placeholder="For example, Java Basics">
             </div>
 
             <div class="field">
-                <label class="field__label" for="description">Description</label>
-                <textarea class="field__input" id="description" name="description"
-                          placeholder="What this test is about"></textarea>
+                <label class="field__label" for="topic">Topic</label>
+                <input class="field__input" id="topic" name="topic" type="text" maxlength="50" required placeholder="For example, Programming">
             </div>
 
             <button class="btn btn-primary" type="submit">Add test</button>
@@ -424,8 +415,8 @@
                     </div>
                     <div class="test__actions">
                         <a class="btn btn-primary" href="${pageContext.request.contextPath}/tests/${t.id}">Take test</a>
-                        <form class="admin-only" method="post"
-                              action="${pageContext.request.contextPath}/tests/${t.id}/delete">
+                        <a class="btn btn-ghost admin-only" href="${pageContext.request.contextPath}/admin/tests/${t.id}">Edit</a>
+                        <form class="admin-only" method="post" action="${pageContext.request.contextPath}/admin/tests/${t.id}/delete">
                             <button class="btn btn-ghost" type="submit">Delete</button>
                         </form>
                     </div>
