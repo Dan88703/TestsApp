@@ -130,7 +130,9 @@
             margin: 0 0 18px;
         }
 
-        body:not(.is-admin) .admin-only { display: none; }
+        body:not(.is-admin) .admin-only {
+            display: none;
+        }
 
         /* Форма */
         .form {
@@ -386,12 +388,14 @@
         <form class="form" method="post" action="${pageContext.request.contextPath}/tests">
             <div class="field">
                 <label class="field__label" for="title">Title</label>
-                <input class="field__input" id="title" name="title" type="text" maxlength="100" required placeholder="For example, Java Basics">
+                <input class="field__input" id="title" name="title" type="text" maxlength="100" required
+                       placeholder="For example, Java Basics">
             </div>
 
             <div class="field">
                 <label class="field__label" for="topic">Topic</label>
-                <input class="field__input" id="topic" name="topic" type="text" maxlength="50" required placeholder="For example, Programming">
+                <input class="field__input" id="topic" name="topic" type="text" maxlength="50" required
+                       placeholder="For example, Programming">
             </div>
 
             <button class="btn btn-primary" type="submit">Add test</button>
@@ -407,16 +411,20 @@
 
         <ul class="tests">
             <c:forEach items="${tests}" var="t">
-                <li class="test">
+                <li class="test ${doneIds.contains(t.id) ? 'is-done' : ''}">
                     <div class="test__info">
-                        <h3 class="test__title"><c:out value="${t.title}"/></h3>
+                        <h3 class="test__title"><c:out value="${t.title}"/><span class="test__badge">Completed</span>
+                        </h3>
                         <p class="test__desc"><c:out value="${t.topic}"/></p>
                         <p class="test__meta">${t.questions.size()} questions</p>
                     </div>
                     <div class="test__actions">
                         <a class="btn btn-primary" href="${pageContext.request.contextPath}/tests/${t.id}">Take test</a>
-                        <a class="btn btn-ghost admin-only" href="${pageContext.request.contextPath}/admin/tests/${t.id}">Edit</a>
-                        <form class="admin-only" method="post" action="${pageContext.request.contextPath}/admin/tests/${t.id}/delete">
+                        <a class="btn btn-ghost admin-only"
+                           href="${pageContext.request.contextPath}/admin/tests/${t.id}">Edit</a>
+                        <form class="admin-only" method="post"
+                              action="${pageContext.request.contextPath}/admin/tests/${t.id}/delete"
+                              onsubmit="return confirm('Delete this test? This cannot be undone.');">
                             <button class="btn btn-ghost" type="submit">Delete</button>
                         </form>
                     </div>
