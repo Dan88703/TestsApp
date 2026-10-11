@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ public class Test {
     private UUID id;
     private String title;
     private String topic;
-    private UUID creatorId;
-    private List<Question> questions;
+    private UUID createdBy;
+    @Builder.Default
+    private List<Question> questions = new ArrayList<>();
 }

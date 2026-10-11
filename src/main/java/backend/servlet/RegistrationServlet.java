@@ -1,6 +1,6 @@
 package backend.servlet;
 
-import backend.dao.Role;
+import backend.entity.Role;
 import backend.entity.User;
 import backend.service.UserService;
 import jakarta.servlet.ServletConfig;

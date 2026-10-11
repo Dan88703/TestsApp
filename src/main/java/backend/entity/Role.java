@@ -1,4 +1,4 @@
-package backend.dao;
+package backend.entity;
 
 public enum Role {
     ADMIN,

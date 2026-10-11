@@ -8,6 +8,7 @@ import lombok.SneakyThrows;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class UserDao {
     private final ObjectMapper mapper;
     private final File file;
 
-    @SneakyThrows
+
     public synchronized boolean save(User user) {
         try {
             List<User> list = find();
@@ -38,7 +39,9 @@ public class UserDao {
     }
 
     public synchronized List<User> find() throws IOException {
-        return mapper.readValue(file, new TypeReference<List<User>>() {
-        });
+        if (!file.exists() || file.length() == 0) {
+            return new ArrayList<>();
+        }
+        return mapper.readValue(file, new TypeReference<List<User>>() {});
     }
 }

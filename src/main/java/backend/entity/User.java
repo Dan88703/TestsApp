@@ -1,6 +1,5 @@
 package backend.entity;
 
-import backend.dao.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

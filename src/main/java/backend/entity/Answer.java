@@ -16,5 +16,5 @@ public class Answer {
     private UUID id;
     private String text;
     @JsonProperty("isCorrect")
-    private boolean isCorrect;
+    private boolean correct;
 }

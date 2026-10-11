@@ -1,9 +1,11 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Регистрация</title>
+    <title>Sign up</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500&display=swap" rel="stylesheet">
@@ -39,7 +41,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Два круга на фоне — единственное украшение */
+        /* Two circles in the background: the only decoration */
         body::before,
         body::after {
             content: "";
@@ -112,7 +114,7 @@
             box-shadow: 0 0 0 4px rgba(52, 70, 240, .16);
         }
 
-        /* Состояния для твоей логики: класс на .field */
+        /* States for your logic: add a class to .field */
         .field__error {
             display: none;
             margin: 0;
@@ -123,6 +125,16 @@
         .field.is-error .field__input:focus { box-shadow: 0 0 0 4px rgba(214, 54, 31, .16); }
         .field.is-error .field__error { display: block; }
         .field.is-valid .field__input { border-color: var(--ok); }
+
+        /* General error from the server: rendered only when there is one */
+        .form__error {
+            margin: 0;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            background: #fdecea;
+            color: var(--error);
+            font-size: .88rem;
+        }
 
         .btn-primary {
             height: 52px;
@@ -157,26 +169,27 @@
 </head>
 <body>
 <main class="card">
-    <h1>Регистрация</h1>
-    <p class="card__sub">Уже есть аккаунт? <a href="/login">Войти</a></p>
+    <h1>Sign up</h1>
+    <p class="card__sub">Already have an account? <a href="${pageContext.request.contextPath}/login">Log in</a></p>
 
-    <% if (request.getAttribute("error") != null) { %>
-    <p class="field__error">${error}</p>
-    <% } %>
-    <form class="form" method="post" action="/reg" novalidate>
+    <form class="form" method="post" action="${pageContext.request.contextPath}/reg" novalidate>
+        <c:if test="${not empty error}">
+            <p class="form__error" role="alert"><c:out value="${error}"/></p>
+        </c:if>
+
         <div class="field">
-            <label class="field__label" for="name">Имя</label>
-            <input class="field__input" id="name" name="name" type="text" placeholder="Как к тебе обращаться" autocomplete="username">
-            <p class="field__error">Введи имя</p>
+            <label class="field__label" for="name">Name</label>
+            <input class="field__input" id="name" name="name" type="text" placeholder="3 to 30 characters" autocomplete="username">
+            <p class="field__error">Enter your name</p>
         </div>
 
         <div class="field">
-            <label class="field__label" for="password">Пароль</label>
-            <input class="field__input" id="password" name="password" type="password" placeholder="Минимум 8 символов" autocomplete="new-password">
-            <p class="field__error">Пароль короче 8 символов</p>
+            <label class="field__label" for="password">Password</label>
+            <input class="field__input" id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="new-password">
+            <p class="field__error">Password is too short</p>
         </div>
 
-        <button class="btn-primary" type="submit">Зарегистрироваться</button>
+        <button class="btn-primary" type="submit">Sign up</button>
     </form>
 </main>
 </body>

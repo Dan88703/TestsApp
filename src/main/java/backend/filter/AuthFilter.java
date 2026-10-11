@@ -1,6 +1,6 @@
 package backend.filter;
 
-import backend.dao.Role;
+import backend.entity.Role;
 import backend.entity.User;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -31,7 +31,6 @@ public class AuthFilter implements Filter {
 
         HttpSession session = req.getSession(false);
         User user = (session == null) ? null : (User) session.getAttribute("user");
-
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;

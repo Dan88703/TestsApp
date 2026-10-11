@@ -1,5 +1,6 @@
 package backend.listener;
 
+import backend.dao.TestDao;
 import backend.dao.UserDao;
 import backend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,9 @@ public class ContextListener implements ServletContextListener {
         ObjectMapper mapper = new ObjectMapper();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         File file = new File("D:\\TestsApp\\src\\main\\resources\\data\\users\\users.json");
+        File testsDir = new File("D:\\TestsApp\\src\\main\\resources\\data\\tests");
+        TestDao testDao = new TestDao(mapper, testsDir);
+        servletContext.setAttribute("testDao", testDao);
         UserDao dao = new UserDao(mapper,file);
         UserService service = new UserService(dao,encoder);
         servletContext.setAttribute("encoder", encoder);

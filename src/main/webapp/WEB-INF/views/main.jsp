@@ -377,9 +377,9 @@
     </style>
 </head>
 <body class="${sessionScope.user.role == 'ADMIN' ? 'is-admin' : ''}">
-
 <div class="page">
     <header class="top">
+        <span>Tests found: ${tests.size()}</span>
         <h1>Tests</h1>
         <div class="top__user">
             <span>Hi, <c:out value="${sessionScope.user.name}"/></span>
@@ -410,39 +410,28 @@
     <section class="card">
         <h2>Available tests</h2>
 
+        <c:if test="${empty tests}">
+            <p class="empty">No tests yet.</p>
+        </c:if>
+
         <ul class="tests">
-            <!-- Один элемент списка = один тест. Повторяй <li> циклом на бэкенде -->
-            <li class="test">
-                <div class="test__info">
-                    <h3 class="test__title">Java Basics<span class="test__badge">Completed</span></h3>
-                    <p class="test__desc">Data types, OOP, collections.</p>
-                    <p class="test__meta">10 questions</p>
-                </div>
-                <div class="test__actions">
-                    <a class="btn btn-primary" href="/tests/1">Take test</a>
-                    <!-- Только для админа -->
-                    <form class="admin-only" method="post" action="/tests/1/delete">
-                        <button class="btn btn-ghost" type="submit">Delete</button>
-                    </form>
-                </div>
-            </li>
-
-            <li class="test is-done">
-                <div class="test__info">
-                    <h3 class="test__title">Spring Boot<span class="test__badge">Completed</span></h3>
-                    <p class="test__desc">Controllers, services, repositories.</p>
-                    <p class="test__meta">8 questions</p>
-                </div>
-                <div class="test__actions">
-                    <a class="btn btn-primary" href="/tests/2">Take test</a>
-                    <form class="admin-only" method="post" action="/tests/2/delete">
-                        <button class="btn btn-ghost" type="submit">Delete</button>
-                    </form>
-                </div>
-            </li>
+            <c:forEach items="${tests}" var="t">
+                <li class="test">
+                    <div class="test__info">
+                        <h3 class="test__title"><c:out value="${t.title}"/></h3>
+                        <p class="test__desc"><c:out value="${t.topic}"/></p>
+                        <p class="test__meta">${t.questions.size()} questions</p>
+                    </div>
+                    <div class="test__actions">
+                        <a class="btn btn-primary" href="${pageContext.request.contextPath}/tests/${t.id}">Take test</a>
+                        <form class="admin-only" method="post"
+                              action="${pageContext.request.contextPath}/tests/${t.id}/delete">
+                            <button class="btn btn-ghost" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            </c:forEach>
         </ul>
-
-
     </section>
 
 </div>
