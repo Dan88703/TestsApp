@@ -1,54 +1,54 @@
 # TestsApp
 
-Веб-приложение для прохождения тестов на Java Servlet/JSP. Есть две роли:
+A web application for taking tests, built with Java Servlets and JSP. It has two roles:
 
-- **ADMIN** создаёт, редактирует и удаляет тесты и вопросы, смотрит статистику.
-- **USER** проходит тесты, смотрит результаты и историю прохождений.
+- **ADMIN** creates, edits and deletes tests and questions, and views statistics.
+- **USER** takes tests and views results and attempt history.
 
-Данные хранятся в JSON-файлах, база данных не нужна.
+Data is stored in JSON files, so no database is required.
 
-## Возможности
+## Features
 
-**Для всех**
-- регистрация и вход (пароли хранятся как хеш BCrypt), выход из аккаунта
-- защита страниц: гость перенаправляется на `/login`
+**Everyone**
+- registration and login (passwords are stored as BCrypt hashes), logout
+- page protection: guests are redirected to `/login`
 
-**Пользователь (USER)**
-- список тестов, у пройденных тестов бейдж «Completed»
-- прохождение теста с таймером (1 минута на вопрос, по истечении времени тест отправляется сам)
-- страница результата с разбором ответов
-- история своих прохождений («My results»)
+**User (USER)**
+- list of tests, with a "Completed" badge on tests already taken
+- taking a test with a timer (1 minute per question; when time runs out the test is submitted automatically)
+- result page with a breakdown of answers
+- personal attempt history ("My results")
 
-**Администратор (ADMIN)**
-- создание теста (название и тема)
-- редактирование названия и темы
-- добавление вопроса (от 2 до 4 ответов, один правильный) и удаление вопроса
-- удаление теста (с подтверждением)
-- статистика: число прохождений, средний и лучший результат по каждому тесту
+**Administrator (ADMIN)**
+- create a test (title and topic)
+- edit the title and topic
+- add a question (2 to 4 answers, one correct) and delete a question
+- delete a test (with confirmation)
+- statistics: number of attempts, average and best result per test
 
-## Технологии
+## Tech stack
 
-| Что | Чем |
+| What | Used |
 |---|---|
-| Язык | Java |
-| Веб | Jakarta Servlet 6, JSP, JSTL 3 |
-| Сервер | Apache Tomcat 10.1 |
-| Сборка | Maven (WAR) |
+| Language | Java |
+| Web | Jakarta Servlet 6, JSP, JSTL 3 |
+| Server | Apache Tomcat 10.1 |
+| Build | Maven (WAR) |
 | JSON | Jackson (+ `jackson-datatype-jsr310`) |
-| Пароли | BCrypt (Spring Security Crypto) |
-| Прочее | Lombok |
+| Passwords | BCrypt (Spring Security Crypto) |
+| Other | Lombok |
 
-## Структура проекта
+## Project structure
 
 ```
 src/main/java/backend/
   entity/     User, Role, Test, Question, Answer, Result, AnswerResult
   dto/        ReviewItem, TestStat
-  dao/        UserDao, TestDao, ResultDao (чтение и запись JSON)
+  dao/        UserDao, TestDao, ResultDao (read and write JSON)
   service/    UserService
-  filter/     AuthFilter (вход и проверка роли)
+  filter/     AuthFilter (login and role checks)
   servlet/    Login, Registration, Logout, Main, Test, AdminTest, Result, AdminStats
-  listener/   ContextListener (создаёт DAO и кладёт их в контекст)
+  listener/   ContextListener (creates the DAOs and stores them in the context)
 
 src/main/webapp/WEB-INF/
   views/      login, reg, main, test, results, result, edit, stats (.jsp)
@@ -56,69 +56,69 @@ src/main/webapp/WEB-INF/
 
 data/
   users/users.json
-  tests/test<uuid>.json      (один файл на тест)
+  tests/test<uuid>.json      (one file per test)
   results/results.json
 ```
 
-## Хранение данных
+## Data storage
 
-- `users.json` — массив пользователей (`id`, `name`, `password` как хеш, `role`)
-- `tests/test<uuid>.json` — один файл на тест, внутри вопросы и ответы
-- `results.json` — массив результатов (`userId`, `testId`, `score`, `total`, ответы)
+- `users.json` is an array of users (`id`, `name`, `password` as a hash, `role`)
+- `tests/test<uuid>.json` is one file per test, with its questions and answers inside
+- `results.json` is an array of results (`userId`, `testId`, `score`, `total`, answers)
 
-Методы DAO синхронизированы (`synchronized`), чтобы одновременные запросы не портили файлы.
+DAO methods are `synchronized` so concurrent requests cannot corrupt the files.
 
-## Запуск
+## Running the app
 
-1. Установить JDK, Maven и Tomcat 10.1.
-2. Открыть проект в IntelliJ IDEA.
-3. Проверить пути к данным в `ContextListener`. Сейчас там
-   `D:\TestsApp\src\main\resources\data\...`, на другом компьютере замени их на свои.
-4. Создать конфигурацию **Tomcat Server → Local**, в деплое выбрать артефакт `TestsApp:war exploded`.
-5. Запустить и открыть `http://localhost:8080/` (контекстный путь зависит от настроек деплоя).
+1. Install a JDK, Maven and Tomcat 10.1.
+2. Open the project in IntelliJ IDEA.
+3. Check the data paths in `ContextListener`. They are currently
+   `D:\TestsApp\src\main\resources\data\...`; change them to match your machine.
+4. Create a **Tomcat Server → Local** run configuration and deploy the `TestsApp:war exploded` artifact.
+5. Start it and open `http://localhost:8080/` (the context path depends on your deployment settings).
 
-> Запускать нужно из конфигурации Tomcat, а не командой `mvn deploy`.
+> Run it from the Tomcat configuration, not with `mvn deploy`.
 
-### Как получить администратора
+### Creating an administrator
 
-Через регистрацию создаётся только роль `USER`. Чтобы сделать админа:
+Registration only creates the `USER` role. To make an admin:
 
-1. Зарегистрируй пользователя.
-2. Открой `users.json` и поменяй у него `"role"` на `"ADMIN"`.
-3. Выйди и войди заново, потому что роль запоминается в сессии при входе.
+1. Register a user.
+2. Open `users.json` and change that user's `"role"` to `"ADMIN"`.
+3. Log out and log in again, because the role is stored in the session at login.
 
-## Маршруты
+## Routes
 
-| Метод | Путь | Кто | Что делает |
+| Method | Path | Who | What it does |
 |---|---|---|---|
-| GET/POST | `/login` | все | вход |
-| GET/POST | `/reg` | все | регистрация |
-| POST | `/logout` | вошедшие | выход |
-| GET | `/main` | вошедшие | список тестов |
-| GET | `/tests/{id}` | вошедшие | страница прохождения |
-| POST | `/tests/{id}/submit` | вошедшие | отправка ответов, подсчёт, сохранение результата |
-| GET | `/results` | вошедшие | история прохождений |
-| GET | `/results/{id}` | вошедшие | разбор одного прохождения |
-| POST | `/tests` | ADMIN | создать тест |
-| GET | `/admin/tests/{id}` | ADMIN | страница редактирования |
-| POST | `/admin/tests/{id}/update` | ADMIN | изменить название и тему |
-| POST | `/admin/tests/{id}/delete` | ADMIN | удалить тест |
-| POST | `/admin/tests/{id}/questions` | ADMIN | добавить вопрос |
-| POST | `/admin/tests/{id}/questions/{qid}/delete` | ADMIN | удалить вопрос |
-| GET | `/admin/stats` | ADMIN | статистика |
+| GET/POST | `/login` | everyone | log in |
+| GET/POST | `/reg` | everyone | register |
+| POST | `/logout` | logged in | log out |
+| GET | `/main` | logged in | list of tests |
+| GET | `/tests/{id}` | logged in | test page |
+| POST | `/tests/{id}/submit` | logged in | submit answers, score, save the result |
+| GET | `/results` | logged in | attempt history |
+| GET | `/results/{id}` | logged in | breakdown of one attempt |
+| POST | `/tests` | ADMIN | create a test |
+| GET | `/admin/tests/{id}` | ADMIN | edit page |
+| POST | `/admin/tests/{id}/update` | ADMIN | change title and topic |
+| POST | `/admin/tests/{id}/delete` | ADMIN | delete a test |
+| POST | `/admin/tests/{id}/questions` | ADMIN | add a question |
+| POST | `/admin/tests/{id}/questions/{qid}/delete` | ADMIN | delete a question |
+| GET | `/admin/stats` | ADMIN | statistics |
 
-## Безопасность
+## Security
 
-- **Права проверяются на сервере** в `AuthFilter`. Скрытие кнопок через CSS нужно только для вида. Обычный пользователь, открывший `/admin/...`, получает 403.
-- Пароли хранятся как хеш BCrypt, длина пароля ограничена 72 байтами (предел BCrypt).
-- После входа меняется идентификатор сессии (`changeSessionId`) против фиксации сессии.
-- Пользователь берётся из сессии, а не из формы, поэтому подменить `userId` в запросе нельзя.
-- При ошибке входа всегда одно сообщение «Invalid name or password», по нему нельзя узнать, существует ли имя.
-- Вывод в JSP экранируется через `<c:out>`.
+- **Permissions are enforced on the server** in `AuthFilter`. Hiding buttons with CSS is only cosmetic. A regular user who opens `/admin/...` gets a 403.
+- Passwords are stored as BCrypt hashes; length is limited to 72 bytes (the BCrypt limit).
+- The session ID is changed after login (`changeSessionId`) to prevent session fixation.
+- The current user is taken from the session, not from a form, so a `userId` cannot be forged in a request.
+- A failed login always shows the same message, "Invalid name or password", so it does not reveal whether a name exists.
+- Output in JSP is escaped with `<c:out>`.
 
-## Отклонения и ограничения
+## Deviations and limitations
 
-- Вместо `PUT` и `DELETE` используются `POST /update` и `POST /delete`, потому что HTML-формы поддерживают только GET и POST.
-- Таймер работает только в браузере, сервер время не проверяет.
-- Данные в файлах подходят для учебного проекта, но не для большой нагрузки.
-- Нет защиты от CSRF.
+- `POST /update` and `POST /delete` are used instead of `PUT` and `DELETE`, because HTML forms only support GET and POST.
+- The timer runs only in the browser; the server does not check the time.
+- File storage is fine for a learning project but not for heavy load.
+- There is no CSRF protection.
